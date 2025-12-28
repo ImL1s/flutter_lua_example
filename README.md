@@ -39,7 +39,7 @@ lib/
 ### Installation
 
 ```bash
-git clone https://github.com/user/flutter_lua_example.git
+git clone https://github.com/ImL1s/flutter_lua_example.git
 cd flutter_lua_example
 flutter pub get
 ```
