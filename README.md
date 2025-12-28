@@ -9,6 +9,7 @@ A Flutter application demonstrating Lua scripting integration using a pure Dart 
 - **Bidirectional Interaction**: Flutter can call Lua functions, Lua can invoke native Dart callbacks
 - **State Management**: Riverpod 3.x integration for reactive state synchronization between Lua and Flutter
 - **Event System**: Custom event emission from Lua to Flutter (logs, toasts, navigation)
+- **Real-World Use Cases**: Practical examples including form validation, pricing engine, A/B testing, and more
 
 ## Architecture
 
@@ -24,8 +25,11 @@ lib/
 │   └── providers/
 │       └── lua_providers.dart       # Riverpod providers for Lua engine
 ├── features/
-│   └── demo/
-│       └── demo_page.dart           # Interactive demo UI
+│   ├── demo/
+│   │   └── demo_page.dart           # Interactive demo UI
+│   └── use_cases/
+│       ├── use_case_scripts.dart    # Real-world Lua script examples
+│       └── use_cases_page.dart      # Use cases demo page
 └── main.dart
 ```
 
@@ -150,6 +154,21 @@ flutter test --coverage
 | [http](https://pub.dev/packages/http) | ^1.2.0 | Script downloading |
 | [path_provider](https://pub.dev/packages/path_provider) | ^2.1.0 | File paths |
 | [crypto](https://pub.dev/packages/crypto) | ^3.0.3 | Signature verification |
+
+## Real-World Use Cases
+
+The app includes practical examples demonstrating Lua's use in production apps:
+
+| Use Case | Description | Scenario |
+|----------|-------------|----------|
+| **Form Validation** | Dynamic validation rules engine | E-commerce checkout, user registration |
+| **UI Visibility** | Control UI based on user/config | VIP features, A/B testing, localization |
+| **Pricing Engine** | Discount and pricing rules | E-commerce promotions, coupons |
+| **A/B Testing** | Feature flags & experiments | Gradual rollout, UI experiments |
+| **Workflow Engine** | Approval process logic | Leave requests, order approval |
+| **Push Strategy** | Smart notification decisions | Cart reminders, re-engagement |
+
+These examples showcase how Lua scripts can be hot-updated to modify app behavior without requiring app store updates.
 
 ## Security Considerations
 

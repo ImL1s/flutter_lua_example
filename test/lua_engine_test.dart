@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_lua_example/core/lua_engine/lua_engine.dart';
 import 'package:flutter_lua_example/core/lua_engine/lua_engine_dart.dart';

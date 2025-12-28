@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_lua_example/core/providers/lua_providers.dart';
-import 'package:flutter_lua_example/core/lua_engine/lua_engine.dart';
 
 void main() {
   group('LuaEngineProviderState', () {

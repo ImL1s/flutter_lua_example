@@ -38,4 +38,27 @@ void main() {
     expect(find.text('狀態'), findsOneWidget);
     expect(find.text('日誌'), findsOneWidget);
   });
+
+  testWidgets('Bottom navigation shows both tabs', (tester) async {
+    await tester.pumpWidget(const ProviderScope(child: MyApp()));
+    await tester.pumpAndSettle();
+
+    // Verify bottom navigation
+    expect(find.text('基礎示例'), findsOneWidget);
+    expect(find.text('實用場景'), findsOneWidget);
+  });
+
+  testWidgets('Can navigate to use cases page', (tester) async {
+    await tester.pumpWidget(const ProviderScope(child: MyApp()));
+    await tester.pumpAndSettle();
+
+    // Tap on use cases tab
+    await tester.tap(find.text('實用場景'));
+    await tester.pumpAndSettle();
+
+    // Verify use cases page is shown
+    expect(find.text('實用場景示例'), findsOneWidget);
+    expect(find.text('表單驗證'), findsOneWidget);
+    expect(find.text('定價引擎'), findsOneWidget);
+  });
 }
