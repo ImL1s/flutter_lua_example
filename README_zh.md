@@ -168,7 +168,7 @@ flutter test integration_test/ -d <device_id> --plain-name "Use Cases Page"
 | 套件 | 版本 | 用途 |
 |------|------|------|
 | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) | ^3.1.0 | 狀態管理 |
-| [lua_dardo](https://pub.dev/packages/lua_dardo) | ^0.0.5 | 純 Dart Lua 5.3 VM |
+| [lua_dardo_plus](https://github.com/ImL1s/LuaDardo) | ^0.3.0 | 純 Dart Lua 5.3 VM (維護中的分支) |
 | [http](https://pub.dev/packages/http) | ^1.2.0 | 腳本下載 |
 | [path_provider](https://pub.dev/packages/path_provider) | ^2.1.0 | 檔案路徑 |
 | [crypto](https://pub.dev/packages/crypto) | ^3.0.3 | 簽名驗證 |
@@ -203,5 +203,6 @@ MIT License
 
 ## Acknowledgments
 
-- [LuaDardo](https://github.com/nicloay/lua_dardo) - Pure Dart Lua implementation
+- [LuaDardo](https://github.com/arcticfox1919/LuaDardo) - 原始純 Dart Lua 實現
+- [LuaDardo Plus](https://github.com/ImL1s/LuaDardo/tree/develop) - 維護中的分支，含錯誤修復
 - [Riverpod](https://riverpod.dev/) - Reactive state management

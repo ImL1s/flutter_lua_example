@@ -171,7 +171,7 @@ flutter test integration_test/ -d <device_id> --plain-name "Use Cases Page"
 | Package | Version | Purpose |
 |---------|---------|---------|
 | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) | ^3.1.0 | State management |
-| [lua_dardo](https://pub.dev/packages/lua_dardo) | ^0.0.5 | Pure Dart Lua 5.3 VM |
+| [lua_dardo_plus](https://github.com/ImL1s/LuaDardo) | ^0.3.0 | Pure Dart Lua 5.3 VM (maintained fork) |
 | [http](https://pub.dev/packages/http) | ^1.2.0 | Script downloading |
 | [path_provider](https://pub.dev/packages/path_provider) | ^2.1.0 | File paths |
 | [crypto](https://pub.dev/packages/crypto) | ^3.0.3 | Signature verification |
@@ -206,5 +206,6 @@ MIT License
 
 ## Acknowledgments
 
-- [LuaDardo](https://github.com/nicloay/lua_dardo) - Pure Dart Lua implementation
+- [LuaDardo](https://github.com/arcticfox1919/LuaDardo) - Original Pure Dart Lua implementation
+- [LuaDardo Plus](https://github.com/ImL1s/LuaDardo/tree/develop) - Maintained fork with bug fixes
 - [Riverpod](https://riverpod.dev/) - Reactive state management
