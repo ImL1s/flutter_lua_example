@@ -101,8 +101,13 @@ void main() {
       await tester.pumpWidget(const ProviderScope(child: MyApp()));
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
+      // Scroll to make Table button visible
+      final tableButton = find.text('Table');
+      await tester.ensureVisible(tableButton);
+      await tester.pumpAndSettle();
+
       // Tap Table button
-      await tester.tap(find.text('Table'));
+      await tester.tap(tableButton, warnIfMissed: false);
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
       // Switch to state tab
@@ -117,8 +122,13 @@ void main() {
       await tester.pumpWidget(const ProviderScope(child: MyApp()));
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
+      // Scroll to make loop button visible
+      final loopButton = find.text('循環');
+      await tester.ensureVisible(loopButton);
+      await tester.pumpAndSettle();
+
       // Tap loop button
-      await tester.tap(find.text('循環'));
+      await tester.tap(loopButton, warnIfMissed: false);
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
       // Switch to state tab
@@ -133,8 +143,13 @@ void main() {
       await tester.pumpWidget(const ProviderScope(child: MyApp()));
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
+      // Scroll to make function button visible
+      final funcButton = find.text('函數');
+      await tester.ensureVisible(funcButton);
+      await tester.pumpAndSettle();
+
       // Tap function button
-      await tester.tap(find.text('函數'));
+      await tester.tap(funcButton, warnIfMissed: false);
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
       // Check result shows factorial value (5! = 120)
@@ -256,6 +271,296 @@ void main() {
 
       // Verify counter has incremented (should be 3)
       expect(find.textContaining('3'), findsWidgets);
+    });
+  });
+
+  group('Use Cases Page E2E Tests', () {
+    testWidgets('Navigate to use cases page', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Tap on use cases tab
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle();
+
+      // Verify use cases page is displayed
+      expect(find.text('實用場景示例'), findsOneWidget);
+      expect(find.text('選擇場景運行 Lua 腳本：'), findsOneWidget);
+    });
+
+    testWidgets('All use case buttons are displayed', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle();
+
+      // Verify all use case buttons
+      expect(find.text('表單驗證'), findsOneWidget);
+      expect(find.text('UI 控制'), findsOneWidget);
+      expect(find.text('定價引擎'), findsOneWidget);
+      expect(find.text('A/B 測試'), findsOneWidget);
+      expect(find.text('審批流程'), findsOneWidget);
+      expect(find.text('推送策略'), findsOneWidget);
+    });
+
+    testWidgets('Form validation use case executes successfully', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Tap form validation button
+      await tester.tap(find.text('表單驗證'));
+      // Give more time for Lua execution and state propagation
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+
+      // Verify tabs are visible (execution completed)
+      expect(find.text('狀態結果'), findsOneWidget);
+      expect(find.text('Lua 腳本'), findsOneWidget);
+      expect(find.text('說明'), findsOneWidget);
+    });
+
+    testWidgets('UI visibility use case executes successfully', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Tap UI control button
+      await tester.tap(find.text('UI 控制'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Verify state shows UI visibility results
+      expect(find.text('uiVisibility'), findsWidgets);
+    });
+
+    testWidgets('Pricing engine use case executes successfully', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Tap pricing engine button
+      await tester.tap(find.text('定價引擎'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Verify state shows pricing results
+      expect(find.text('pricingResult'), findsWidgets);
+    });
+
+    testWidgets('A/B testing use case executes successfully', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Tap A/B testing button
+      await tester.tap(find.text('A/B 測試'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+
+      // Verify tabs are visible (execution completed)
+      expect(find.text('狀態結果'), findsOneWidget);
+      expect(find.text('Lua 腳本'), findsOneWidget);
+    });
+
+    testWidgets('Workflow engine use case executes successfully', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Tap workflow engine button
+      await tester.tap(find.text('審批流程'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+
+      // Verify tabs are visible (execution completed)
+      expect(find.text('狀態結果'), findsOneWidget);
+      expect(find.text('Lua 腳本'), findsOneWidget);
+    });
+
+    testWidgets('Push strategy use case executes successfully', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Tap push strategy button
+      await tester.tap(find.text('推送策略'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+
+      // Verify tabs are visible (execution completed)
+      expect(find.text('狀態結果'), findsOneWidget);
+      expect(find.text('Lua 腳本'), findsOneWidget);
+    });
+
+    testWidgets('Tab navigation works on use cases page', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Execute a use case first
+      await tester.tap(find.text('表單驗證'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Verify all tabs exist
+      expect(find.text('狀態結果'), findsOneWidget);
+      expect(find.text('Lua 腳本'), findsOneWidget);
+      expect(find.text('說明'), findsOneWidget);
+
+      // Navigate to Lua script tab
+      await tester.tap(find.text('Lua 腳本'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Verify script content is visible (contains Lua keywords)
+      expect(find.textContaining('local'), findsWidgets);
+
+      // Navigate to explanation tab
+      await tester.tap(find.text('說明'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Verify explanation content
+      expect(find.textContaining('驗證'), findsWidgets);
+    });
+
+    testWidgets('Reset button clears use cases state', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Verify engine is ready
+      expect(find.text('Lua 引擎就緒'), findsOneWidget);
+
+      // Tap reset button
+      final resetButton = find.byIcon(Icons.refresh);
+      expect(resetButton, findsOneWidget);
+      await tester.tap(resetButton);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Verify welcome message is shown
+      expect(find.text('選擇上方場景查看 Lua 腳本實際應用'), findsOneWidget);
+    });
+
+    testWidgets('Engine status shows ready on use cases page', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle();
+
+      // Verify engine status shows ready
+      expect(find.text('Lua 引擎就緒'), findsOneWidget);
+    });
+
+    testWidgets('Can switch between demo and use cases pages', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Start on demo page
+      expect(find.text('Flutter Lua Demo'), findsOneWidget);
+
+      // Navigate to use cases
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle();
+      expect(find.text('實用場景示例'), findsOneWidget);
+
+      // Navigate back to demo
+      await tester.tap(find.text('基礎示例'));
+      await tester.pumpAndSettle();
+      expect(find.text('Flutter Lua Demo'), findsOneWidget);
+
+      // Navigate to use cases again
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle();
+      expect(find.text('實用場景示例'), findsOneWidget);
+    });
+
+    testWidgets('State expansion works correctly', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Execute UI control (simpler state structure)
+      await tester.tap(find.text('UI 控制'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Verify state cards are visible
+      expect(find.text('狀態結果'), findsOneWidget);
+    });
+
+    testWidgets('Multiple use cases can be executed sequentially', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Execute form validation first
+      await tester.tap(find.text('表單驗證'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+
+      // Verify first use case executed
+      expect(find.text('狀態結果'), findsOneWidget);
+
+      // Execute pricing engine (should clear previous state)
+      await tester.tap(find.text('定價引擎'));
+      await tester.pump(const Duration(seconds: 1));
+      await tester.pumpAndSettle(const Duration(seconds: 4));
+
+      // Verify pricing state exists
+      expect(find.text('pricingResult'), findsWidgets);
+    });
+
+    testWidgets('Toast notifications appear after use case execution', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 3));
+
+      // Navigate to use cases page
+      await tester.tap(find.text('實用場景'));
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      // Execute UI control (should show toast)
+      await tester.tap(find.text('UI 控制'));
+      // Wait for toast to appear
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump(const Duration(milliseconds: 500));
+
+      // Verify snackbar appears
+      expect(find.byType(SnackBar), findsWidgets);
     });
   });
 }

@@ -420,7 +420,7 @@ return {features = enabledFeatures, experiments = experimentAssignments}
 
 -- 請假申請資料
 local leaveRequest = {
-  id = "req_" .. os.time(),
+  id = "req_" .. math.random(10000, 99999),
   type = "annual", -- annual, sick, personal
   employeeId = "emp_001",
   employeeName = "王小明",
@@ -573,7 +573,7 @@ local user = {
   id = "user_456",
   name = "李小華",
   timezone = 8, -- GMT+8
-  lastActiveTime = os.time() - 3600 * 2, -- 2小時前
+  lastActiveTime = 1735400000 - 3600 * 2, -- 模擬2小時前（使用固定時間戳）
   preferences = {
     marketing = true,
     orderUpdates = true,
@@ -652,8 +652,9 @@ function selectPushContent(u)
     })
   end
 
-  -- 久未活躍提醒
-  local inactiveHours = (os.time() - u.lastActiveTime) / 3600
+  -- 久未活躍提醒（使用固定時間戳模擬）
+  local currentTime = 1735400000
+  local inactiveHours = (currentTime - u.lastActiveTime) / 3600
   if inactiveHours > 24 then
     table.insert(candidates, {
       template = "inactiveReminder",

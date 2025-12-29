@@ -135,7 +135,9 @@ The project includes comprehensive tests:
 - **Unit Tests**: `test/lua_engine_test.dart` - LuaEngine core functionality (50+ tests)
 - **Provider Tests**: `test/lua_providers_test.dart` - Riverpod state management
 - **Widget Tests**: `test/widget_test.dart` - UI smoke tests
-- **Integration Tests**: `integration_test/app_test.dart` - E2E user flows
+- **Integration Tests**: `integration_test/app_test.dart` - E2E user flows (30+ tests)
+  - Basic Demo Page tests (15 tests)
+  - Use Cases Page tests (15 tests)
 
 ```bash
 # Run all tests
@@ -143,6 +145,12 @@ flutter test
 
 # Run with coverage
 flutter test --coverage
+
+# Run integration tests on simulator
+flutter test integration_test/ -d <device_id>
+
+# Run only Use Cases Page E2E tests
+flutter test integration_test/ -d <device_id> --plain-name "Use Cases Page"
 ```
 
 ## Dependencies
