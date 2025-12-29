@@ -23,8 +23,8 @@ void main() {
 
       test('engine info contains correct metadata', () {
         final info = engine.engineInfo;
-        expect(info['name'], equals('LuaDardo'));
-        expect(info['version'], equals('0.0.5'));
+        expect(info['name'], equals('LuaDardo Plus'));
+        expect(info['version'], equals('0.3.0'));
         expect(info['luaVersion'], equals('5.3'));
         expect(info['platform'], equals('Dart'));
         expect(info['sandboxed'], isTrue);

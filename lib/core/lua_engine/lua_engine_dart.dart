@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:lua_dardo/lua.dart';
+import 'package:lua_dardo_plus/lua.dart';
 
 import 'lua_engine.dart';
 
@@ -37,8 +37,8 @@ class LuaEngineDart implements LuaEngine {
 
   @override
   Map<String, dynamic> get engineInfo => {
-        'name': 'LuaDardo',
-        'version': '0.0.5',
+        'name': 'LuaDardo Plus',
+        'version': '0.3.0',
         'luaVersion': '5.3',
         'platform': 'Dart',
         'sandboxed': _sandboxed,
