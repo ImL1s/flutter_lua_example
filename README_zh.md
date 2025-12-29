@@ -10,7 +10,7 @@
 
 ### 功能特色
 
-- **純 Dart Lua VM**：使用 [LuaDardo](https://pub.dev/packages/lua_dardo) 實現跨平台支援（Android、iOS、Web）
+- **純 Dart Lua VM**：使用 [LuaDardo Plus](https://github.com/ImL1s/LuaDardo/tree/develop) (維護中的分支) 實現跨平台支援（Android、iOS、Web）
 - **沙盒模式**：安全的執行環境，已移除危險的 Lua 函式庫（`os`、`io`、`debug`、`dofile`、`loadfile`）
 - **雙向交互**：Flutter 可呼叫 Lua 函數，Lua 可調用原生 Dart 回調
 - **狀態管理**：整合 Riverpod 3.x，實現 Lua 與 Flutter 之間的響應式狀態同步

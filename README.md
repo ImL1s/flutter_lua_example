@@ -12,7 +12,7 @@ A Flutter application demonstrating Lua scripting integration using a pure Dart 
 
 ### Features
 
-- **Pure Dart Lua VM**: Cross-platform support (Android, iOS, Web) using [LuaDardo](https://pub.dev/packages/lua_dardo)
+- **Pure Dart Lua VM**: Cross-platform support (Android, iOS, Web) using [LuaDardo Plus](https://github.com/ImL1s/LuaDardo/tree/develop) (a maintained fork of LuaDardo)
 - **Sandbox Mode**: Secure execution environment with dangerous Lua libraries removed (`os`, `io`, `debug`, `dofile`, `loadfile`)
 - **Bidirectional Interaction**: Flutter can call Lua functions, Lua can invoke native Dart callbacks
 - **State Management**: Riverpod 3.x integration for reactive state synchronization between Lua and Flutter
