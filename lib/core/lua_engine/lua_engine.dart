@@ -48,10 +48,7 @@ abstract class LuaEngine {
   /// 可選參數：
   /// - [sandboxed] 是否啟用沙箱模式（移除危險函數）
   /// - [memoryLimit] 內存限制（字節），null 表示無限制
-  Future<void> init({
-    bool sandboxed = true,
-    int? memoryLimit,
-  });
+  Future<void> init({bool sandboxed = true, int? memoryLimit});
 
   /// 釋放資源
   ///
@@ -164,7 +161,9 @@ abstract class LuaEngineFactory {
   /// 目前使用純 Dart 實現 (LuaDardo)
   /// 未來可根據平台選擇 FFI 或 WASM 實現
   static LuaEngine create() {
-    // TODO: 根據平台返回不同實現
+    // 平台策略說明：
+    // 目前使用純 Dart 實現 (LuaEngineDart) 以確保跨平台一致性。
+    // 若未來需要 FFI/WASM 支持以提升性能，可在此根據平台選擇實現：
     // if (kIsWeb) return LuaEngineWasm();
     // if (Platform.isAndroid || Platform.isIOS) return LuaEngineNative();
     throw UnimplementedError(
