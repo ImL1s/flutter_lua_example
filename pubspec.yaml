@@ -39,7 +39,8 @@ dependencies:
   flutter_riverpod: ^3.1.0
 
   # Lua Engine - Pure Dart implementation (our fork with Web + Async support)
-  lua_dardo_plus: ^0.3.0
+  lua_dardo_plus:
+    path: ./LuaDardo
 
   # HTTP for script downloading
   http: ^1.2.0

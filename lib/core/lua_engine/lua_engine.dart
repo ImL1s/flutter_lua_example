@@ -45,10 +45,15 @@ abstract class LuaEngine {
   /// 初始化引擎
   ///
   /// 必須在使用其他方法之前調用。
-  /// 可選參數：
-  /// - [sandboxed] 是否啟用沙箱模式（移除危險函數）
-  /// - [memoryLimit] 內存限制（字節），null 表示無限制
-  Future<void> init({bool sandboxed = true, int? memoryLimit});
+  ///
+  /// [sandboxed] 是否啟用安全沙箱（禁用 os/io 等庫）
+  /// [memoryLimit] 內存限制（字節），可選
+  /// [instructionLimit] 指令限制（防止死循環），預設 100000
+  Future<void> init({
+    bool sandboxed = true,
+    int? memoryLimit,
+    int instructionLimit = 100000,
+  });
 
   /// 釋放資源
   ///

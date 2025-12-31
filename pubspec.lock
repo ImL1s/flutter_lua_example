@@ -381,10 +381,9 @@ packages:
   lua_dardo_plus:
     dependency: "direct main"
     description:
-      name: lua_dardo_plus
-      sha256: "91ff0fe79cbb2017a15cf341f4b996a605ccfa0e54897b6c5e70766d59764ba5"
-      url: "https://pub.dev"
-    source: hosted
+      path: LuaDardo
+      relative: true
+    source: path
     version: "0.3.0"
   matcher:
     dependency: transitive

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:lua_dardo_plus/lua.dart';
+import 'package:lua_dardo_plus/src/state/lua_state_impl.dart';
 
 import 'lua_engine.dart';
 
@@ -59,22 +60,27 @@ class LuaEngineDart implements LuaEngine {
   LuaEngineDart._();
 
   @override
-  Future<void> init({bool sandboxed = true, int? memoryLimit}) async {
-    if (_engineState != LuaEngineState.uninitialized) {
-      throw LuaInitException('Engine already initialized');
-    }
+  Future<void> init({
+    bool sandboxed = true,
+    int? memoryLimit,
+    int instructionLimit = 100000,
+  }) async {
+    if (_engineState != LuaEngineState.uninitialized) return;
 
     _engineState = LuaEngineState.initializing;
     _sandboxed = sandboxed;
 
     try {
-      // 創建 Lua 狀態機
       _state = LuaState.newState();
 
-      // 載入標準庫
+      // 設定指令限制 (防止死循環)
+      if (_state is LuaStateImpl && instructionLimit > 0) {
+        (_state as LuaStateImpl).setInstructionLimit(instructionLimit);
+      }
+
       _state!.openLibs();
 
-      // 如果啟用沙箱，移除危險函數
+      // If sandbox is enabled, remove dangerous functions
       if (sandboxed) {
         _applySandbox();
       }
