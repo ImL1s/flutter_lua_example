@@ -102,17 +102,27 @@ class _UseCasesPageState extends ConsumerState<UseCasesPage> {
       ),
       body: Column(
         children: [
-          // 引擎狀態
+          // 引擎狀態 (固定在頂部)
           _buildEngineStatus(engineState),
 
-          // 用例選擇網格
-          _buildUseCaseGrid(),
-
-          // 結果展示區域
           Expanded(
-            child: _selectedUseCase == null
-                ? _buildWelcomeMessage()
-                : _buildResultArea(stateMap),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // 用例選擇網格
+                  _buildUseCaseGrid(),
+
+                  // 結果展示區域 (如果已選擇)
+                  if (_selectedUseCase != null)
+                    SizedBox(
+                      height: 500, // 給予固定高度以便滾動
+                      child: _buildResultArea(stateMap),
+                    )
+                  else
+                    _buildWelcomeMessage(),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -185,26 +195,16 @@ class _UseCasesPageState extends ConsumerState<UseCasesPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.touch_app,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.touch_app, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             '選擇上方場景查看 Lua 腳本實際應用',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
           ),
           const SizedBox(height: 8),
           Text(
             '這些場景展示了 Lua 在真實 APP 中的常見用途',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
         ],
       ),
@@ -324,18 +324,12 @@ class _UseCasesPageState extends ConsumerState<UseCasesPage> {
         children: [
           Text(
             useCase['name'] ?? '',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             useCase['description'] ?? '',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
           ),
           const SizedBox(height: 24),
           _buildExplanationContent(),
@@ -490,15 +484,18 @@ class _UseCasesPageState extends ConsumerState<UseCasesPage> {
     final prefix = '  ' * indent;
     if (value is Map) {
       if (value.isEmpty) return '{}';
-      final entries = value.entries.map((e) {
-        return '$prefix  ${e.key}: ${_formatValue(e.value, indent + 1)}';
-      }).join('\n');
+      final entries = value.entries
+          .map((e) {
+            return '$prefix  ${e.key}: ${_formatValue(e.value, indent + 1)}';
+          })
+          .join('\n');
       return '{\n$entries\n$prefix}';
     }
     if (value is List) {
       if (value.isEmpty) return '[]';
-      final items =
-          value.map((e) => '$prefix  ${_formatValue(e, indent + 1)}').join('\n');
+      final items = value
+          .map((e) => '$prefix  ${_formatValue(e, indent + 1)}')
+          .join('\n');
       return '[\n$items\n$prefix]';
     }
     if (value is String) return '"$value"';
@@ -561,10 +558,7 @@ class _UseCaseButton extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else
-                Text(
-                  icon,
-                  style: const TextStyle(fontSize: 24),
-                ),
+                Text(icon, style: const TextStyle(fontSize: 24)),
               const SizedBox(height: 4),
               Text(
                 name,

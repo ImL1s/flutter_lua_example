@@ -219,16 +219,10 @@ return result
           _buildExampleButtons(),
 
           // 代碼編輯器
-          Expanded(
-            flex: 3,
-            child: _buildCodeEditor(),
-          ),
+          Expanded(flex: 3, child: _buildCodeEditor()),
 
           // 結果區域
-          Expanded(
-            flex: 2,
-            child: _buildResultArea(stateMap),
-          ),
+          Expanded(flex: 2, child: _buildResultArea(stateMap)),
         ],
       ),
     );
@@ -265,9 +259,9 @@ return result
             style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
           ),
           const Spacer(),
-          if (engineState.isReady)
+          if (engineState.isReady && engineState.engine != null)
             Text(
-              'LuaDardo v0.0.5',
+              '${engineState.engine!.engineInfo['name']} v${engineState.engine!.engineInfo['version']}',
               style: TextStyle(color: Colors.grey[600], fontSize: 12),
             ),
         ],
@@ -342,10 +336,7 @@ return result
               controller: _codeController,
               maxLines: null,
               expands: true,
-              style: const TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontFamily: 'monospace', fontSize: 14),
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(12),
@@ -449,10 +440,7 @@ return result
           padding: const EdgeInsets.symmetric(vertical: 2),
           child: Text(
             log,
-            style: const TextStyle(
-              fontFamily: 'monospace',
-              fontSize: 12,
-            ),
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
           ),
         );
       },
