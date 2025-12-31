@@ -9,6 +9,7 @@ A Flutter application demonstrating the integration of a Lua scripting engine us
 *   **Bidirectional Interop:** Flutter can call Lua functions, and Lua can invoke native Dart callbacks.
 *   **State Management:** Deep integration with **Riverpod 3.x** for reactive state synchronization.
 *   **Sandbox Mode:** Secure execution environment with potentially dangerous Lua libraries disabled.
+*   **Instruction Counting:** Built-in protection against infinite loops by limiting the maximum number of executed instructions.
 *   **Event System:** Custom event emission from Lua to Flutter (e.g., logs, navigation, toasts).
 
 ## Architecture
@@ -58,6 +59,7 @@ The project follows a clean architecture pattern, separating the core engine log
     *   Always use the `LuaEngine` abstract interface rather than the concrete class.
     *   Communication between Lua and Dart should primarily happen through `registerFunction` (for logic) and `emit` (for events).
     *   Lua scripts should be treated as untrusted input; the sandbox mode is enabled by default.
+    *   **Infinite Loop Prevention:** Always configure an `instructionLimit` during engine initialization to protect the UI thread.
 *   **Testing:**
     *   Logic involving the Lua VM should be tested in `test/lua_engine_test.dart`.
     *   Full user flows involving script execution should be covered in `integration_test/`.

@@ -1,6 +1,5 @@
 import 'package:flutter_lua_example/core/providers/script_provider.dart';
 import 'package:flutter_lua_example/core/script_manager/script_manager.dart';
-import 'package:flutter_lua_example/core/script_manager/script_metadata.dart';
 import 'package:flutter_lua_example/core/script_manager/script_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';

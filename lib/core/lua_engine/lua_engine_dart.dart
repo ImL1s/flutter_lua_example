@@ -65,7 +65,9 @@ class LuaEngineDart implements LuaEngine {
     int? memoryLimit,
     int instructionLimit = 100000,
   }) async {
-    if (_engineState != LuaEngineState.uninitialized) return;
+    if (_engineState != LuaEngineState.uninitialized) {
+      throw LuaInitException('Engine already initialized');
+    }
 
     _engineState = LuaEngineState.initializing;
     _sandboxed = sandboxed;

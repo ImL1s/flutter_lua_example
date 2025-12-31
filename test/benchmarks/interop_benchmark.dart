@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import '../../lib/core/lua_engine/lua_engine.dart';
-import '../../lib/core/lua_engine/lua_engine_dart.dart';
+import 'package:flutter_lua_example/core/lua_engine/lua_engine.dart';
+import 'package:flutter_lua_example/core/lua_engine/lua_engine_dart.dart';
 
 void main() {
   late LuaEngine engine;
 
   setUp(() async {
     engine = LuaEngineDart.create();
-    await engine.init();
+    await engine.init(instructionLimit: 1000000);
   });
 
   group('Interop Benchmarks', () {

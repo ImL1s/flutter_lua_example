@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
-import '../../lib/core/lua_engine/lua_engine.dart';
-import '../../lib/core/lua_engine/lua_engine_dart.dart';
+import 'package:flutter_lua_example/core/lua_engine/lua_engine.dart';
+import 'package:flutter_lua_example/core/lua_engine/lua_engine_dart.dart';
 
 void main() {
   group('Startup & Memory Benchmarks', () {
@@ -9,7 +9,7 @@ void main() {
       final stopwatch = Stopwatch()..start();
 
       final LuaEngine engine = LuaEngineDart.create();
-      await engine.init();
+      await engine.init(instructionLimit: 1000000);
 
       stopwatch.stop();
       print('Engine Startup Time: ${stopwatch.elapsedMilliseconds} ms');
@@ -17,7 +17,7 @@ void main() {
 
     test('Memory usage', () async {
       final LuaEngine engine = LuaEngineDart.create();
-      await engine.init();
+      await engine.init(instructionLimit: 0);
 
       final initialMemory = ProcessInfo.currentRss;
       print('Initial Memory: ${initialMemory / 1024 / 1024} MB');
