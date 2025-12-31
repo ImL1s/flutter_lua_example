@@ -37,12 +37,12 @@ class LuaEngineDart implements LuaEngine {
 
   @override
   Map<String, dynamic> get engineInfo => {
-        'name': 'LuaDardo Plus',
-        'version': '0.3.0',
-        'luaVersion': '5.3',
-        'platform': 'Dart',
-        'sandboxed': _sandboxed,
-      };
+    'name': 'LuaDardo Plus',
+    'version': '0.3.0',
+    'luaVersion': '5.3',
+    'platform': 'Dart',
+    'sandboxed': _sandboxed,
+  };
 
   @override
   int get memoryUsage {
@@ -59,10 +59,7 @@ class LuaEngineDart implements LuaEngine {
   LuaEngineDart._();
 
   @override
-  Future<void> init({
-    bool sandboxed = true,
-    int? memoryLimit,
-  }) async {
+  Future<void> init({bool sandboxed = true, int? memoryLimit}) async {
     if (_engineState != LuaEngineState.uninitialized) {
       throw LuaInitException('Engine already initialized');
     }
@@ -85,6 +82,11 @@ class LuaEngineDart implements LuaEngine {
       // 註冊內部輔助函數
       _registerInternalFunctions();
 
+      // 註冊已有的回調函數
+      _registeredCallbacks.forEach((name, _) {
+        _injectLuaProxy(name);
+      });
+
       _engineState = LuaEngineState.ready;
     } catch (e, stackTrace) {
       _engineState = LuaEngineState.error;
@@ -99,12 +101,12 @@ class LuaEngineDart implements LuaEngine {
   void _applySandbox() {
     // 移除危險的全局函數和庫
     final dangerousFunctions = [
-      'os',          // 操作系統命令
-      'io',          // 文件 I/O
-      'debug',       // 調試功能
-      'dofile',      // 執行文件
-      'loadfile',    // 載入文件
-      'load',        // 動態載入代碼（部分限制）
+      'os', // 操作系統命令
+      'io', // 文件 I/O
+      'debug', // 調試功能
+      'dofile', // 執行文件
+      'loadfile', // 載入文件
+      'load', // 動態載入代碼（部分限制）
     ];
 
     for (final funcName in dangerousFunctions) {
@@ -177,14 +179,20 @@ class LuaEngineDart implements LuaEngine {
       if (result is Future) {
         // 對於異步操作，我們無法直接返回結果
         // 先返回 nil，結果通過事件發送
-        result.then((value) {
-          emitEvent(LuaEvent.custom('callbackResult', {
-            'function': funcName,
-            'result': value,
-          }));
-        }).catchError((error) {
-          emitEvent(LuaEvent.error(error.toString(), code: 'CALLBACK_ERROR'));
-        });
+        result
+            .then((value) {
+              emitEvent(
+                LuaEvent.custom('callbackResult', {
+                  'function': funcName,
+                  'result': value,
+                }),
+              );
+            })
+            .catchError((error) {
+              emitEvent(
+                LuaEvent.error(error.toString(), code: 'CALLBACK_ERROR'),
+              );
+            });
         ls.pushNil();
         return 1;
       }
@@ -215,28 +223,33 @@ class LuaEngineDart implements LuaEngine {
     // 根據事件類型發送
     switch (eventType) {
       case 'stateChange':
-        emitEvent(LuaEvent.stateChange(
-          data['key']?.toString() ?? '',
-          data['value'],
-        ));
+        emitEvent(
+          LuaEvent.stateChange(data['key']?.toString() ?? '', data['value']),
+        );
         break;
       case 'toast':
-        emitEvent(LuaEvent.toast(
-          data['message']?.toString() ?? '',
-          type: data['type']?.toString(),
-        ));
+        emitEvent(
+          LuaEvent.toast(
+            data['message']?.toString() ?? '',
+            type: data['type']?.toString(),
+          ),
+        );
         break;
       case 'navigate':
-        emitEvent(LuaEvent.navigation(
-          data['route']?.toString() ?? '',
-          data['params'] as Map<String, dynamic>?,
-        ));
+        emitEvent(
+          LuaEvent.navigation(
+            data['route']?.toString() ?? '',
+            data['params'] as Map<String, dynamic>?,
+          ),
+        );
         break;
       case 'log':
-        emitEvent(LuaEvent.log(
-          data['level']?.toString() ?? 'info',
-          data['message']?.toString() ?? '',
-        ));
+        emitEvent(
+          LuaEvent.log(
+            data['level']?.toString() ?? 'info',
+            data['message']?.toString() ?? '',
+          ),
+        );
         break;
       default:
         emitEvent(LuaEvent.custom(eventType, data));
@@ -326,10 +339,7 @@ class LuaEngineDart implements LuaEngine {
       _state!.getGlobal(funcName);
       if (!_state!.isFunction(-1)) {
         _state!.pop(1);
-        throw LuaCallException(
-          'Not a function',
-          functionName: funcName,
-        );
+        throw LuaCallException('Not a function', functionName: funcName);
       }
 
       // 壓入參數
@@ -342,11 +352,7 @@ class LuaEngineDart implements LuaEngine {
       if (result != ThreadStatus.luaOk) {
         final error = _state!.toStr(-1) ?? 'Unknown error';
         _state!.pop(1);
-        throw LuaCallException(
-          error,
-          functionName: funcName,
-          arguments: args,
-        );
+        throw LuaCallException(error, functionName: funcName, arguments: args);
       }
 
       // 獲取返回值
@@ -434,9 +440,24 @@ class LuaEngineDart implements LuaEngine {
     }
   }
 
-  @override
   void registerFunction(String name, LuaCallback callback) {
     _registeredCallbacks[name] = callback;
+    if (isReady) {
+      _injectLuaProxy(name);
+    }
+  }
+
+  void _injectLuaProxy(String name) {
+    // 創建一個 Lua 包裝函數，轉發調用到 callNative
+    // function name(...) return callNative('name', ...) end
+    final code =
+        '''
+      function $name(...)
+        return callNative('$name', ...)
+      end
+    ''';
+    _state!.loadString(code);
+    _state!.pCall(0, 0, 0);
   }
 
   @override

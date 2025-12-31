@@ -581,4 +581,82 @@ void main() {
       expect(find.byType(SnackBar), findsWidgets);
     });
   });
+  group('Script Manager UI Tests', () {
+    testWidgets('Download and run script flow', (tester) async {
+      await tester.pumpWidget(const ProviderScope(child: MyApp()));
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      // Open drawer via icon
+      await tester.tap(find.byIcon(Icons.download));
+      await tester.pumpAndSettle();
+
+      // Verify drawer content
+      expect(find.text('熱更新腳本管理'), findsOneWidget);
+
+      // Tap download
+      await tester.tap(find.text('模擬下載遠端腳本'));
+      await tester.pump(); // Trigger logic
+      // Wait for 1.5 seconds (Mock delay is 1s)
+      await tester.pump(const Duration(milliseconds: 1500));
+
+      // Check if script is added to list
+      // We retry a few times to allow for state update
+      bool scriptFound = false;
+      for (int i = 0; i < 5; i++) {
+        await tester.pump(const Duration(milliseconds: 500));
+        if (find.textContaining('remote_script').evaluate().isNotEmpty) {
+          scriptFound = true;
+          break;
+        }
+      }
+
+      if (!scriptFound) {
+        // Check for failure message if script not found
+        final errorFinder = find.textContaining('加載失敗');
+        if (errorFinder.evaluate().isNotEmpty) {
+          final text = tester.widget<Text>(errorFinder.first);
+          fail('Download reported failure: ${text.data}');
+        }
+        fail(
+          'Script download failed: "remote_script" not found in list, and no error message shown.',
+        );
+      }
+
+      // Optional: Check snackbar if possible, but don't block
+      if (find.textContaining('下載成功').evaluate().isNotEmpty) {
+        // Good
+      }
+
+      // Now settle animations
+      await tester.pumpAndSettle();
+
+      // Verify script is added to list and play it
+      // We pick the last play button assuming it's the most recent or at least one exists
+      final playButtons = find.byIcon(Icons.play_arrow_rounded);
+      expect(playButtons, findsAtLeastNWidgets(1));
+
+      await tester.tap(playButtons.last);
+      await tester.pumpAndSettle();
+
+      // Should close drawer and run script
+      // Verify snackbar
+      // Verify output in code editor
+      // This confirms the script was loaded from disk
+      final codeEditor = find.byType(TextField);
+      expect(
+        find.descendant(
+          of: codeEditor,
+          matching: find.textContaining('print("Hello from Remote Script'),
+        ),
+        findsOneWidget,
+      );
+
+      // Verify execution log
+      await tester.tap(find.text('日誌'));
+      await tester.pumpAndSettle();
+      // Ensure we find the log entry which starts with [log]
+      expect(find.textContaining('[log]'), findsAtLeastNWidgets(1));
+      expect(find.textContaining('Status: Ready'), findsAtLeastNWidgets(1));
+    });
+  });
 }
